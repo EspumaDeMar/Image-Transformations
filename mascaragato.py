@@ -1,17 +1,21 @@
+# Importamos las dependencias del proyecto
+import cv2 
 import numpy as np
-import cv2
 
-face_cascade = cv2.CascadeClassifier('C:\\Users\\Barbies\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalcatface.xml')
+image = cv2.imread('gato.jpg')
+cv2.imshow('ORIGINAL', image)
+cv2.waitKey(0)
 
-img = cv2.imread('C:\\Users\\Barbies\\Desktop\\Computacion Visual\\Tareas\\Tarea02\\gatoD.jpg')
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# Ahora creamos una máscara circular y la mostramos en pantalla.
+circular_mask = np.zeros(image.shape[:2], dtype='uint8')
+cv2.circle(circular_mask, (300, 500), 150, 255, -1)
+cv2.imshow('MASCARA CIRCULAR', circular_mask)
+cv2.waitKey(0)
 
-faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+# Aplicamos la máscara circular a la imagen de entrada para aislar el logo del gato.
+masked = cv2.bitwise_and(image, image, mask=circular_mask)
+cv2.imshow('MASCARA CIRCULAR, RESULTADO', masked)
+cv2.waitKey(0)
 
-for x,y,w,h in faces:
-        cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
-        
-cv2.imwrite('image.jpg', img)
-cv2.imshow('foto.jpg',img)
-print("Success!")
-cv2.waitKey()
+# Destruimos todas las ventanas creadas.
+cv2.destroyAllWindows()
